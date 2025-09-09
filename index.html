@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarbQueue - Interactive Project Brief</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: The application is structured as a single-page, scrollable "Project Explorer." A sticky top navigation allows users to jump between key sections: Objective, Features, Technology, Roadmap, and Benefits. This thematic structure was chosen to make a dense project brief easily digestible. Instead of a linear read, stakeholders can quickly navigate to the sections most relevant to them. Key interactive elements include a tabbed interface for exploring features (to prevent information overload) and a clickable timeline for the roadmap, which makes the development plan more engaging and clear. This user-flow prioritizes clarity and targeted information retrieval over simply replicating the document's layout. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Key Features List -> Goal: Organize/Inform -> Viz: Tabbed Interface -> Interaction: Click tabs (Core, Advanced, Unique) to filter content -> Justification: Breaks a long list into manageable, user-selectable chunks, improving readability. -> Method: Vanilla JS.
+        - Report Info: Development Roadmap -> Goal: Show Change/Progression -> Viz: Horizontal Timeline -> Interaction: Click on a phase to highlight it and its details -> Justification: More engaging and intuitive than a static list, visually represents project flow. -> Method: Vanilla JS & CSS.
+        - Report Info: Technology Stack -> Goal: Organize/Inform -> Viz: Card-based Grid Layout -> Interaction: None (static) -> Justification: Visually separates different layers of the tech stack for better clarity than a simple table. -> Method: HTML/Tailwind CSS.
+        - Report Info: QR Code Process -> Goal: Inform/Organize -> Viz: Numbered step diagram -> Interaction: None (static) -> Justification: Clearly visualizes the user flow for the walk-in feature. -> Method: HTML/Tailwind CSS.
+        - Report Info: Analytics/Reports Feature -> Goal: Demonstrate a concept -> Viz: Bar Chart (Mock Data) -> Interaction: Hover for tooltips -> Justification: Provides a concrete example of the type of data visualization planned for the final application. -> Library: Chart.js/Canvas. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        .active-nav {
+            color: #D97706; 
+            font-weight: 600;
+        }
+        .tab.active {
+            border-color: #D97706;
+            background-color: #FEF3C7;
+            color: #92400E;
+        }
+        .roadmap-phase.active {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #D97706;
+        }
+        .chart-container { 
+            position: relative; 
+            width: 100%; 
+            max-width: 600px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            height: 300px;
+            max-height: 400px; 
+        }
+        @media (min-width: 768px) { 
+            .chart-container { 
+                height: 350px; 
+            } 
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-gray-800">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-amber-900">BarbQueue Brief</h1>
+            <div class="hidden md:flex space-x-8">
+                <a href="#objective" class="nav-link text-gray-600 hover:text-amber-600 transition duration-300">Objective</a>
+                <a href="#features" class="nav-link text-gray-600 hover:text-amber-600 transition duration-300">Features</a>
+                <a href="#tech" class="nav-link text-gray-600 hover:text-amber-600 transition duration-300">Technology</a>
+                <a href="#roadmap" class="nav-link text-gray-600 hover:text-amber-600 transition duration-300">Roadmap</a>
+                <a href="#benefits" class="nav-link text-gray-600 hover:text-amber-600 transition duration-300">Benefits</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-amber-900">
+                <span class="text-3xl">≡</span>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden bg-white py-2">
+             <a href="#objective" class="block text-center py-2 text-gray-600 hover:text-amber-600 transition duration-300">Objective</a>
+             <a href="#features" class="block text-center py-2 text-gray-600 hover:text-amber-600 transition duration-300">Features</a>
+             <a href="#tech" class="block text-center py-2 text-gray-600 hover:text-amber-600 transition duration-300">Technology</a>
+             <a href="#roadmap" class="block text-center py-2 text-gray-600 hover:text-amber-600 transition duration-300">Roadmap</a>
+             <a href="#benefits" class="block text-center py-2 text-gray-600 hover:text-amber-600 transition duration-300">Benefits</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="objective" class="scroll-mt-20 mb-16">
+            <h2 class="text-4xl font-bold text-center text-amber-900 mb-4">Project Objective</h2>
+            <p class="text-center text-lg text-amber-800 max-w-3xl mx-auto mb-12">
+                This section outlines the primary goal of the project: to develop a comprehensive, browser-based web application for barbershops. The application aims to streamline operations by managing appointments, walk-ins, payments, and providing robust admin controls, all without requiring any installation for the customers.
+            </p>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-amber-900 mb-4">Core Mission</h3>
+                    <p class="text-gray-600">
+                        To develop a web-based application for barbershops that manages appointments, walk-ins, a queue system, payments, and admin control. The app will run in the browser — no installation required for customers.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-bold text-amber-900 mb-4">QR Code Walk-In Process</h3>
+                    <div class="flex flex-col space-y-4">
+                        <div class="flex items-center">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500 text-white font-bold mr-4">1</span>
+                            <p class="text-gray-600">Customer scans QR code at shop entrance.</p>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500 text-white font-bold mr-4">2</span>
+                            <p class="text-gray-600">A webpage opens to enter name, phone, and service.</p>
+                        </div>
+                        <div class="flex items-center">
+                           <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500 text-white font-bold mr-4">3</span>
+                            <p class="text-gray-600">System adds them to the live queue.</p>
+                        </div>
+                         <div class="flex items-center">
+                           <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500 text-white font-bold mr-4">4</span>
+                            <p class="text-gray-600">Customer views position & estimated wait time.</p>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-500 text-white font-bold mr-4">5</span>
+                            <p class="text-gray-600">Barber sees the queue update in real-time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="scroll-mt-20 mb-16">
+            <h2 class="text-4xl font-bold text-center text-amber-900 mb-4">Interactive Feature Explorer</h2>
+            <p class="text-center text-lg text-amber-800 max-w-3xl mx-auto mb-8">
+                The application is built with a rich set of features, categorized to meet different business needs. Use the tabs below to explore the core functionalities, advanced enhancements for growth, and unique touches that set the app apart. This interactive view helps in understanding the product's depth and capabilities.
+            </p>
+            <div class="flex justify-center border-b border-gray-300 mb-8">
+                <button class="tab active px-6 py-3 text-lg font-semibold border-b-2" data-target="core">Core</button>
+                <button class="tab px-6 py-3 text-lg font-semibold border-b-2 border-transparent" data-target="advanced">Advanced</button>
+                <button class="tab px-6 py-3 text-lg font-semibold border-b-2 border-transparent" data-target="unique">Unique</button>
+            </div>
+            <div id="feature-content" class="bg-white p-8 rounded-xl shadow-lg">
+                <div id="core" class="tab-content grid md:grid-cols-2 gap-x-8 gap-y-4">
+                    <p><strong>Online Appointment Booking:</strong> Customers choose service, date & time.</p>
+                    <p><strong>Walk-in Queue (via QR Code):</strong> Scan at shop → join live queue.</p>
+                    <p><strong>Queue Management:</strong> Barber sees real-time list of waiting customers.</p>
+                    <p><strong>Payment Integration:</strong> Cash, UPI, cards, or wallets.</p>
+                    <p><strong>Admin Login (Barber):</strong> Dashboard for appointments, queue, services, payments.</p>
+                    <p><strong>Service Management:</strong> Add/edit/delete services & prices.</p>
+                    <p><strong>Booking History & Favorites:</strong> Easy repeat bookings.</p>
+                    <p><strong>Notifications:</strong> Booking confirmation & reminders via email/SMS.</p>
+                </div>
+                <div id="advanced" class="tab-content hidden">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <p class="mb-2"><strong>Ratings & Reviews:</strong> Customers share feedback.</p>
+                            <p class="mb-2"><strong>Offers/Deals/Coupons:</strong> Promotions for customer loyalty.</p>
+                            <p class="mb-2"><strong>Staff Management:</strong> Track shifts, schedules, leaves.</p>
+                            <p class="mb-2"><strong>Calendar Integration:</strong> Sync appointments with Google/Outlook.</p>
+                             <p class="mb-2"><strong>Analytics/Reports:</strong> Charts showing revenue, busiest hours, top customers.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-amber-800 text-center mb-2">Example: Monthly Revenue Report</h4>
+                             <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="unique" class="tab-content hidden grid md:grid-cols-2 gap-x-8 gap-y-4">
+                    <p><strong>Live Queue Display:</strong> Waiting time shown on shop TV/monitor.</p>
+                    <p><strong>Self Check-In Kiosk:</strong> Tablet at entrance for walk-ins.</p>
+                    <p><strong>Referral System:</strong> Customers earn rewards for inviting friends.</p>
+                    <p><strong>Photo Gallery:</strong> Showcase hairstyles and before-after looks.</p>
+                    <p><strong>E-commerce:</strong> Sell grooming products and gift cards online.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="tech" class="scroll-mt-20 mb-16">
+            <h2 class="text-4xl font-bold text-center text-amber-900 mb-4">Technology Stack & Architecture</h2>
+            <p class="text-center text-lg text-amber-800 max-w-3xl mx-auto mb-12">
+                This project will be built using a modern, robust technology stack. The following cards detail the technologies chosen for each layer of the application, from the user-facing frontend to the server-side backend and database. This structure ensures scalability, security, and a seamless user experience.
+            </p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                    <h3 class="text-xl font-bold text-amber-900 mb-2">Frontend</h3>
+                    <p class="text-gray-600">React (or Vue) with Tailwind CSS for a responsive UI, booking forms, queue display, and payment interfaces.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                    <h3 class="text-xl font-bold text-amber-900 mb-2">Backend</h3>
+                    <p class="text-gray-600">Java (Spring Boot) to build robust REST APIs for bookings, payments, authentication, and queue logic.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                    <h3 class="text-xl font-bold text-amber-900 mb-2">Database</h3>
+                    <p class="text-gray-600">MySQL or PostgreSQL for reliable storage of user data, services, bookings, payments, and logs.</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg text-center">
+                    <h3 class="text-xl font-bold text-amber-900 mb-2">Payments & Auth</h3>
+                    <p class="text-gray-600">Razorpay/Stripe for payments and Spring Security with JWT for secure, role-based authentication.</p>
+                </div>
+            </div>
+            <div class="mt-8 grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-amber-900 mb-2">High-Level Structure</h3>
+                    <pre class="bg-gray-100 rounded-lg p-4 text-sm text-gray-700 overflow-x-auto"><code>barber-webapp/
+├── backend/ (Spring Boot)
+│   ├── controllers/
+│   ├── services/
+│   ├── models/
+│   └── repository/
+├── frontend/ (React/Vue)
+│   ├── components/
+│   ├── pages/
+│   └── services/
+└── database/ (MySQL)</code></pre>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-amber-900 mb-2">Example Database Tables</h3>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1">
+                        <li><strong>Users:</strong> id, name, phone, email, role</li>
+                        <li><strong>Services:</strong> id, name, price, duration</li>
+                        <li><strong>Bookings:</strong> id, user_id, service_id, date, status</li>
+                        <li><strong>Queue:</strong> id, user_id, join_time, position</li>
+                        <li><strong>Payments:</strong> id, user_id, amount, method, status</li>
+                        <li><strong>Reviews:</strong> id, user_id, rating, comment</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="scroll-mt-20 mb-16">
+            <h2 class="text-4xl font-bold text-center text-amber-900 mb-4">Interactive Development Roadmap</h2>
+             <p class="text-center text-lg text-amber-800 max-w-3xl mx-auto mb-12">
+                Development will follow a phased approach, starting with a Minimum Viable Product (MVP) and progressively adding more features. Click on each phase below to highlight its key deliverables. This interactive timeline helps visualize the project's progression from core functionality to a full-featured application.
+            </p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="roadmap-phase active bg-white p-6 rounded-xl shadow-lg border-2 border-transparent cursor-pointer transition-all duration-300" data-phase="1">
+                    <h3 class="text-2xl font-bold text-amber-900 mb-3">Phase 1 – Core MVP</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>Appointment booking</li>
+                        <li>Walk-in queue with QR</li>
+                        <li>Admin dashboard</li>
+                        <li>Service & price management</li>
+                    </ul>
+                </div>
+                <div class="roadmap-phase bg-white p-6 rounded-xl shadow-lg border-2 border-transparent cursor-pointer transition-all duration-300" data-phase="2">
+                    <h3 class="text-2xl font-bold text-amber-900 mb-3">Phase 2 – Enhancements</h3>
+                     <ul class="text-gray-600 space-y-2">
+                        <li>Payment integration</li>
+                        <li>Booking notifications</li>
+                        <li>Reviews, offers, history</li>
+                    </ul>
+                </div>
+                <div class="roadmap-phase bg-white p-6 rounded-xl shadow-lg border-2 border-transparent cursor-pointer transition-all duration-300" data-phase="3">
+                    <h3 class="text-2xl font-bold text-amber-900 mb-3">Phase 3 – Unique Additions</h3>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>Analytics dashboard</li>
+                        <li>Staff management</li>
+                        <li>E-commerce & referrals</li>
+                        <li>Live queue display screen</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="benefits" class="scroll-mt-20">
+             <h2 class="text-4xl font-bold text-center text-amber-900 mb-4">Project Benefits</h2>
+            <p class="text-center text-lg text-amber-800 max-w-3xl mx-auto mb-12">
+                This application is designed to deliver significant value to all stakeholders. From providing convenience to customers to enabling operational efficiency for barbers and driving business growth, the benefits are multi-faceted. Explore the key advantages for each group below.
+            </p>
+            <div class="grid md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-amber-900 mb-3">For Customers</h3>
+                    <p class="text-gray-600">Easy booking, real-time updates on queue status, and an overall better, more convenient experience.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-amber-900 mb-3">For Barbers</h3>
+                    <p class="text-gray-600">Efficiently manage time, appointments, walk-in queues, and payments from a single, easy-to-use dashboard.</p>
+                </div>
+                 <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold text-amber-900 mb-3">For the Business</h3>
+                    <p class="text-gray-600">Increased customer loyalty and retention through modern features like offers, reviews, and referral systems.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white mt-16 border-t">
+        <div class="container mx-auto px-6 py-4 text-center text-gray-500">
+            <p>&copy; 2025 BarbQueue Project. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const revenueChartCanvas = document.getElementById('revenueChart');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    const target = tab.dataset.target;
+                    tabContents.forEach(content => {
+                        if (content.id === target) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            if (revenueChartCanvas) {
+                const ctx = revenueChartCanvas.getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['April', 'May', 'June', 'July', 'August', 'September'],
+                        datasets: [{
+                            label: 'Monthly Revenue ($)',
+                            data: [12500, 14200, 13800, 15500, 16100, 15800],
+                            backgroundColor: 'rgba(217, 119, 6, 0.6)',
+                            borderColor: 'rgba(217, 119, 6, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.dataset.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        if (context.parsed.y !== null) {
+                                            label += new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(context.parsed.y);
+                                        }
+                                        return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+            
+            const roadmapPhases = document.querySelectorAll('.roadmap-phase');
+            roadmapPhases.forEach(phase => {
+                phase.addEventListener('click', () => {
+                    roadmapPhases.forEach(p => p.classList.remove('active'));
+                    phase.classList.add('active');
+                });
+            });
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute('id');
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove('active-nav');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active-nav');
+                    }
+                });
+            });
+
+        });
+    </script>
+</body>
+</html>
